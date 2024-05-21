@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fullstack_service_programing/screens/home_screen.dart';
+import 'package:fullstack_service_programing/widgets/bottom_nav_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Homescreen(),
+      home: BottomNavWidget(),
     );
   }
 }
