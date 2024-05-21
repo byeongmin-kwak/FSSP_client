@@ -8,10 +8,14 @@ class MapScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: NaverMap(
-        options: const NaverMapViewOptions(),
-        onMapReady: (controller) {
-          print("네이버 맵 로딩됨!");
-        },
+        options: const NaverMapViewOptions(
+          initialCameraPosition: NCameraPosition(
+              target: NLatLng(37.247949112203, 127.07700000000),
+              zoom: 15,
+              bearing: 0,
+              tilt: 0),
+        ),
+        onMapReady: (controller) {},
       ),
     );
   }
