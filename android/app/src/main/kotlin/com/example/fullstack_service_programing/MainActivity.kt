@@ -1,4 +1,4 @@
-package com.example.fullstack_service_programing
+package com.example.FSSP_cilent
 
 import io.flutter.embedding.android.FlutterActivity
 

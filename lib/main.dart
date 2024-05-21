@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
-import 'package:fullstack_service_programing/widgets/bottom_nav_widget.dart';
+import 'package:FSSP_cilent/widgets/bottom_nav_widget.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {

@@ -1,6 +1,6 @@
 {
-    "name": "fullstack_service_programing",
-    "short_name": "fullstack_service_programing",
+    "name": "FSSP_cilent",
+    "short_name": "FSSP_cilent",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
