@@ -16,7 +16,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    //MapScreen(),
+    MapScreen(),
     //FavoriteScreen(),
     //ProfileScreen(),
   ];
@@ -30,7 +30,10 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _widgetOptions.elementAt(_selectedIndex),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _widgetOptions,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -55,6 +58,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
         unselectedItemColor: Colors.grey,
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
         unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+        showUnselectedLabels: true,
         onTap: _onItemTapped,
       ),
     );
