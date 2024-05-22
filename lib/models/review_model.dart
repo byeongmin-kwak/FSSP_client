@@ -1,9 +1,10 @@
 class ReviewModel {
-  final String id, address, advantage, disadvantage;
+  final String id, address, advantage, disadvantage, createdAt;
 
   ReviewModel.fromJson(Map<String, dynamic> json)
-      : id = json["id"],
+      : id = json["_id"],
         address = json["address"],
         advantage = json["advantage"],
-        disadvantage = json["disadvantage"];
+        disadvantage = json["disadvantage"],
+        createdAt = json["createdAt"];
 }

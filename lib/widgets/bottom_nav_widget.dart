@@ -14,9 +14,9 @@ class BottomNavWidget extends StatefulWidget {
 class _BottomNavWidgetState extends State<BottomNavWidget> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    MapScreen(),
+    const MapScreen(),
     //FavoriteScreen(),
     //ProfileScreen(),
   ];

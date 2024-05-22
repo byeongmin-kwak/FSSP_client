@@ -1,7 +1,11 @@
+import 'package:FSSP_cilent/models/review_model.dart';
+import 'package:FSSP_cilent/services/api_service.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  final Future<List<ReviewModel>> reviews = ApiService.getLatestRevies();
 
   @override
   Widget build(BuildContext context) {
