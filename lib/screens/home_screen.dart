@@ -1,11 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:FSSP_cilent/models/review_model.dart';
 import 'package:FSSP_cilent/services/api_service.dart';
-import 'package:flutter/material.dart';
+import 'package:FSSP_cilent/widgets/review_widget.dart';
+import 'package:flutter/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  final Future<List<ReviewModel>> reviews = ApiService.getLatestRevies();
+  final Future<List<ReviewModel>> reviews = ApiService.getLatestReviews();
 
   @override
   Widget build(BuildContext context) {
@@ -25,33 +27,72 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: const Column(
+      body: Column(
         children: [
-          SearchBar(
+          const SearchBar(
             trailing: [Icon(Icons.search)],
             hintText: "주소를 검색해주세요.",
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
-          Text(
+          const Text(
             "#원룸 #오피스텔 #아파트",
           ),
-          Text(
-            "최신 후기",
+          const Text(
+            "최신 리뷰",
           ),
-          Row(
-            children: [],
+          Expanded(
+            child: FutureBuilder<List<ReviewModel>>(
+              future: reviews,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                } else if (snapshot.hasData) {
+                  return makeList(snapshot);
+                } else {
+                  return const Center(
+                    child: Text('No reviews available'),
+                  );
+                }
+              },
+            ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
-          Text("#수원시 #영통구"),
-          Text("관심 지역 후기"),
-          Row(
+          const Text("#수원시 #영통구"),
+          const Text("관심 지역 리뷰"),
+          const Row(
             children: [],
           ),
         ],
+      ),
+    );
+  }
+
+  ListView makeList(AsyncSnapshot<List<ReviewModel>> snapshot) {
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemCount: snapshot.data!.length,
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      itemBuilder: (context, index) {
+        var review = snapshot.data![index];
+        return Review(
+          id: review.id,
+          address: review.address,
+          advantage: review.advantage,
+          disadvantage: review.disadvantage,
+        );
+      },
+      separatorBuilder: (context, index) => const SizedBox(
+        width: 40,
       ),
     );
   }
