@@ -28,7 +28,7 @@ class ApiService {
       double southWestLat, double southWestLng) async {
     final response = await http.get(
       Uri.parse(
-          '$baseUrl/reviews?northEastLat=$northEastLat&northEastLng=$northEastLng&southWestLat=$southWestLat&southWestLng=$southWestLng'),
+          '$baseUrl/api/map-reviews/?northEastLat=$northEastLat&northEastLng=$northEastLng&southWestLat=$southWestLat&southWestLng=$southWestLng'),
     );
 
     if (response.statusCode == 200) {

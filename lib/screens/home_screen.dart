@@ -1,8 +1,9 @@
+import 'package:FSSP_cilent/screens/building_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:FSSP_cilent/models/review_model.dart';
 import 'package:FSSP_cilent/services/api_service.dart';
 import 'package:FSSP_cilent/widgets/review_widget.dart';
-import 'package:flutter/widgets.dart';
+import 'package:remedi_kopo/remedi_kopo.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -29,9 +30,26 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const SearchBar(
-            trailing: [Icon(Icons.search)],
+          SearchBar(
+            trailing: const [Icon(Icons.search)],
             hintText: "주소를 검색해주세요.",
+            onTap: () async {
+              KopoModel? model = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RemediKopo(),
+                ),
+              );
+              if (model != null) {
+                String? address = model.address;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BuildingScreen(address: address!),
+                  ),
+                );
+              }
+            },
           ),
           const SizedBox(
             height: 30,
