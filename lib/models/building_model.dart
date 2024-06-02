@@ -32,14 +32,22 @@ class BuildingModel {
   }
 
   static String _formatDate(String date) {
-    print('Original date string: $date'); // 디버깅을 위해 추가한 부분
     if (date.isEmpty) return '';
-    try {
-      final parsedDate = DateTime.parse(date);
-      print('Parsed date: $parsedDate'); // 디버깅을 위해 추가한 부분
-      return DateFormat("yyyy년 MM월 dd일").format(parsedDate);
-    } catch (e) {
-      return date;
+
+    if (RegExp(r'^[0-9]+$').hasMatch(date)) {
+      if (date.length == 6) {
+        return DateFormat("yyyy년 MM월").format(DateTime(
+          int.parse(date.substring(0, 4)),
+          int.parse(date.substring(4, 6)),
+        ));
+      } else if (date.length == 8) {
+        return DateFormat("yyyy년 MM월 dd일").format(DateTime(
+          int.parse(date.substring(0, 4)),
+          int.parse(date.substring(4, 6)),
+          int.parse(date.substring(6, 8)),
+        ));
+      }
     }
+    return date;
   }
 }
