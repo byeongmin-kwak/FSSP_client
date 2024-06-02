@@ -37,7 +37,7 @@ class _BuildingScreenState extends State<BuildingScreen> {
   void initState() {
     super.initState();
     initPrefs();
-    buildingInfo = ApiService.getBuildingInfo();
+    buildingInfo = ApiService.getBuildingInfo(widget.address);
   }
 
   onHeartTap() async {
@@ -121,13 +121,13 @@ class _BuildingScreenState extends State<BuildingScreen> {
                       defaultVerticalAlignment:
                           TableCellVerticalAlignment.middle,
                       children: [
-                        _buildTableRow('지상 층수', building.grndFlrCnt),
-                        _buildTableRow('지하 층수', building.ugrndFlrCnt),
-                        _buildTableRow('승강기 수', building.rideUseElvtCnt),
+                        _buildTableRow('지상 층수', '${building.grndFlrCnt}층'),
+                        _buildTableRow('지하 층수', '${building.ugrndFlrCnt}층'),
+                        _buildTableRow('승강기 수', '${building.rideUseElvtCnt}대'),
                         _buildTableRow('허가일	', building.pmsDay),
                         _buildTableRow('착공일', building.stcnsDay),
                         _buildTableRow('사용승인일', building.useAprDay),
-                        _buildTableRow('대지면적(㎡)', building.platArea),
+                        _buildTableRow('대지면적(㎡)', '${building.platArea}m²'),
                       ],
                     ),
                   ),

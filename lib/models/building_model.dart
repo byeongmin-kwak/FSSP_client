@@ -4,7 +4,6 @@ class BuildingModel {
   final String grndFlrCnt, // 지상층수
       ugrndFlrCnt,
       rideUseElvtCnt,
-      atchBldArea,
       pmsDay,
       stcnsDay,
       useAprDay,
@@ -14,7 +13,6 @@ class BuildingModel {
     required this.grndFlrCnt,
     required this.ugrndFlrCnt,
     required this.rideUseElvtCnt,
-    required this.atchBldArea,
     required this.pmsDay,
     required this.stcnsDay,
     required this.useAprDay,
@@ -23,14 +21,13 @@ class BuildingModel {
 
   factory BuildingModel.fromJson(Map<String, dynamic> json) {
     return BuildingModel(
-      grndFlrCnt: json['grndFlrCnt'].toString(),
-      ugrndFlrCnt: json['ugrndFlrCnt'].toString(),
-      rideUseElvtCnt: json['rideUseElvtCnt'].toString(),
-      atchBldArea: json['atchBldArea'].toString(),
-      pmsDay: _formatDate(json['pmsDay'].toString()),
-      stcnsDay: _formatDate(json['stcnsDay'].toString()),
-      useAprDay: _formatDate(json['useAprDay'].toString()),
-      platArea: json['platArea'].toString(),
+      grndFlrCnt: json['grndFlrCnt']?.toString() ?? '',
+      ugrndFlrCnt: json['ugrndFlrCnt']?.toString() ?? '',
+      rideUseElvtCnt: json['rideUseElvtCnt']?.toString() ?? '',
+      pmsDay: _formatDate(json['pmsDay']?.toString() ?? ''),
+      stcnsDay: _formatDate(json['stcnsDay']?.toString() ?? ''),
+      useAprDay: _formatDate(json['useAprDay']?.toString() ?? ''),
+      platArea: json['platArea']?.toString() ?? '',
     );
   }
 

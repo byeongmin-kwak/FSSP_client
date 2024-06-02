@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:FSSP_cilent/models/building_model.dart';
 import 'package:FSSP_cilent/models/review_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart' show rootBundle;
 
 class ApiService {
   static final String baseUrl = dotenv.get("BASE_URL");
@@ -41,15 +43,36 @@ class ApiService {
   }
 
   // 건물 정보 조회
-  static Future<BuildingModel> getBuildingInfo() async {
+  static Future<BuildingModel> getBuildingInfo(String address) async {
+    final jsonString = await rootBundle.loadString('lib/경기도 수원시 영통구.json');
+    final Map<String, dynamic> jsonMap = json.decode(jsonString);
+    final List<dynamic> data = jsonMap['Data'];
+
+    // 주소로 데이터 찾기
+    final buildingData = data.firstWhere(
+      (element) => element['NEW_PLAT_PLC'] == address,
+      orElse: () => null,
+    );
+
+    if (buildingData == null) {
+      throw Exception('Address not found');
+    }
+
+    print(buildingData);
+
+    final String sigunguCd = buildingData['SIGUNGU_CD'];
+    final String bjdongCd = buildingData['BJDONG_CD'];
+    final String bun = buildingData['BUN'];
+    final String ji = buildingData['JI'];
+
     final response = await http.get(
       Uri.parse(
-          'http://apis.data.go.kr/1613000/BldRgstService_v2/getBrTitleInfo?sigunguCd=11680&bjdongCd=10300&bun=0012&ji=0000&_type=json&ServiceKey=$serviceKey'),
+          'http://apis.data.go.kr/1613000/BldRgstService_v2/getBrTitleInfo?sigunguCd=$sigunguCd&bjdongCd=$bjdongCd&bun=$bun&ji=$ji&_type=json&ServiceKey=$serviceKey'),
     );
     print('-----------------${response.body}');
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final buildingData = jsonResponse['response']['body']['items']['item'][0];
+      final buildingData = jsonResponse['response']['body']['items']['item'];
       return BuildingModel.fromJson(buildingData);
     } else {
       throw Error();
