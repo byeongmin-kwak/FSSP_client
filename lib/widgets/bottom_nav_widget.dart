@@ -5,7 +5,9 @@ import 'package:FSSP_cilent/screens/favorite_screen.dart';
 import 'package:FSSP_cilent/screens/profile_screen.dart';
 
 class BottomNavWidget extends StatefulWidget {
-  const BottomNavWidget({super.key});
+  final int initialIndex;
+
+  const BottomNavWidget({super.key, required this.initialIndex});
 
   @override
   _BottomNavWidgetState createState() => _BottomNavWidgetState();
@@ -20,6 +22,12 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
     //FavoriteScreen(),
     //ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
 
   void _onItemTapped(int index) {
     setState(() {

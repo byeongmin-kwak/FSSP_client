@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:FSSP_cilent/models/building_model.dart';
 import 'package:FSSP_cilent/models/review_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
   static final String baseUrl = dotenv.get("BASE_URL");
+  static final String serviceKey = dotenv.get("SERVICE_KEY");
 
   // 메인페이지에서의 최신 리뷰 조회
   static Future<List<ReviewModel>> getLatestReviews() async {
@@ -35,6 +37,22 @@ class ApiService {
       return json.decode(response.body);
     } else {
       throw Exception('Failed to fetch reviews');
+    }
+  }
+
+  // 건물 정보 조회
+  static Future<BuildingModel> getBuildingInfo() async {
+    final response = await http.get(
+      Uri.parse(
+          'http://apis.data.go.kr/1613000/BldRgstService_v2/getBrTitleInfo?sigunguCd=11680&bjdongCd=10300&bun=0012&ji=0000&_type=json&ServiceKey=$serviceKey'),
+    );
+    print('-----------------${response.body}');
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      final buildingData = jsonResponse['response']['body']['items']['item'][0];
+      return BuildingModel.fromJson(buildingData);
+    } else {
+      throw Error();
     }
   }
 }
