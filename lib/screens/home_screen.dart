@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:FSSP_cilent/screens/building_screen.dart';
+import 'package:FSSP_cilent/screens/review_write_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:FSSP_cilent/models/review_model.dart';
 import 'package:FSSP_cilent/services/api_service.dart';
@@ -129,7 +130,10 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // 여기에 버튼을 눌렀을 때 수행할 작업을 정의합니다.
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ReviewWriteScreen()),
+          );
         },
         backgroundColor: Colors.blue,
         child: const Icon(Icons.edit),
