@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:FSSP_cilent/services/api_service.dart';
 import 'package:FSSP_cilent/widgets/keyword_selector.dart';
 import 'package:FSSP_cilent/widgets/rating_row.dart';
 
@@ -16,10 +17,11 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
   String? _selectedResidenceType;
   String? _selectedResidenceYear;
   String? _selectedResidenceFloor;
-  final TextEditingController _strengthsController = TextEditingController();
-  final TextEditingController _weaknessesController = TextEditingController();
+  final TextEditingController _advantagesController = TextEditingController();
+  final TextEditingController _disadvantagesController =
+      TextEditingController();
 
-  final List<String> _strengthKeywords = [
+  final List<String> _advantageKeywords = [
     '없음',
     '주차',
     '대중교통',
@@ -39,7 +41,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
     '마트 · 편의점',
   ];
 
-  final List<String> _weaknessKeywords = [
+  final List<String> _disadvantageKeywords = [
     '없음',
     '주차',
     '대중교통',
@@ -60,11 +62,35 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
     '마트 · 편의점',
   ];
 
-  final Set<String> _selectedStrengthKeywords = {};
-  final Set<String> _selectedWeaknessKeywords = {};
+  final Set<String> _selectedadvantageKeywords = {};
+  final Set<String> _selecteddisadvantageKeywords = {};
 
   double _overallRating = 0;
   String _ratingFeedback = '';
+
+  Future<void> _submitReview() async {
+    final reviewData = {
+      'address': _selectedAddress,
+      'residenceType': _selectedResidenceType,
+      'residenceYear': _selectedResidenceYear,
+      'residenceFloor': _selectedResidenceFloor,
+      'advantage': _advantagesController.text,
+      'disadvantage': _disadvantagesController.text,
+      'advantageKeywords': _selectedadvantageKeywords.toList(),
+      'disadvantageKeywords': _selecteddisadvantageKeywords.toList(),
+      'overallRating': _overallRating,
+    };
+
+    final success = await ApiService.submitReview(reviewData);
+
+    if (success) {
+      print('Review submitted successfully');
+      // 제출 성공 처리
+    } else {
+      print('Failed to submit review');
+      // 제출 실패 처리
+    }
+  }
 
   void _onKeywordSelected(
       String keyword, bool selected, Set<String> selectedKeywords) {
@@ -263,7 +289,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
                 ),
               ),
               TextFormField(
-                controller: _strengthsController,
+                controller: _advantagesController,
                 maxLines: 5,
                 decoration: const InputDecoration(
                   hintText: '예시) 층간소음 한 번도 겪은 적 없어요! 방음이 좋아요',
@@ -273,11 +299,11 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
               const SizedBox(height: 8),
               KeywordSelector(
                 title: "장점 키워드를 선택해 주세요",
-                keywords: _strengthKeywords,
-                selectedKeywords: _selectedStrengthKeywords,
+                keywords: _advantageKeywords,
+                selectedKeywords: _selectedadvantageKeywords,
                 onSelected: (keyword, selected) {
                   _onKeywordSelected(
-                      keyword, selected, _selectedStrengthKeywords);
+                      keyword, selected, _selectedadvantageKeywords);
                 },
               ),
               const SizedBox(height: 16),
@@ -289,7 +315,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
                 ),
               ),
               TextFormField(
-                controller: _weaknessesController,
+                controller: _disadvantagesController,
                 maxLines: 5,
                 decoration: const InputDecoration(
                   hintText: '예시) 층간소음이 심해요. 대화부터 발소리까지 들려요',
@@ -299,11 +325,11 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
               const SizedBox(height: 8),
               KeywordSelector(
                 title: "단점 키워드를 선택해 주세요",
-                keywords: _weaknessKeywords,
-                selectedKeywords: _selectedWeaknessKeywords,
+                keywords: _disadvantageKeywords,
+                selectedKeywords: _selecteddisadvantageKeywords,
                 onSelected: (keyword, selected) {
                   _onKeywordSelected(
-                      keyword, selected, _selectedWeaknessKeywords);
+                      keyword, selected, _selecteddisadvantageKeywords);
                 },
               ),
               const SizedBox(height: 16),
@@ -358,7 +384,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: _submitReview,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   padding: const EdgeInsets.symmetric(vertical: 16.0),

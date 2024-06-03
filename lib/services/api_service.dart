@@ -75,4 +75,18 @@ class ApiService {
       throw Error();
     }
   }
+
+  // 리뷰 작성
+  static Future<bool> submitReview(Map<String, dynamic> reviewData) async {
+    final url = Uri.parse('$baseUrl/api/reviews');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(reviewData),
+    );
+
+    return response.statusCode == 200;
+  }
 }
