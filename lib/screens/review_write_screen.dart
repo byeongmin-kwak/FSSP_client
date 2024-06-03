@@ -1,21 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: ReviewWriteScreen(),
-    );
-  }
-}
+import 'package:FSSP_cilent/widgets/keyword_selector.dart';
+import 'package:FSSP_cilent/widgets/rating_row.dart';
 
 class ReviewWriteScreen extends StatefulWidget {
   const ReviewWriteScreen({super.key});
@@ -78,6 +65,17 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
 
   double _overallRating = 0;
   String _ratingFeedback = '';
+
+  void _onKeywordSelected(
+      String keyword, bool selected, Set<String> selectedKeywords) {
+    setState(() {
+      if (selected) {
+        selectedKeywords.add(keyword);
+      } else {
+        selectedKeywords.remove(keyword);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,11 +224,36 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
-              buildRatingRow("집 내부"),
-              buildRatingRow("건물/단지"),
-              buildRatingRow("교통"),
-              buildRatingRow("치안"),
-              buildRatingRow("생활/입지"),
+              RatingRow(
+                label: "집 내부",
+                onRatingUpdate: (rating) {
+                  // Handle rating update
+                },
+              ),
+              RatingRow(
+                label: "건물/단지",
+                onRatingUpdate: (rating) {
+                  // Handle rating update
+                },
+              ),
+              RatingRow(
+                label: "교통",
+                onRatingUpdate: (rating) {
+                  // Handle rating update
+                },
+              ),
+              RatingRow(
+                label: "치안",
+                onRatingUpdate: (rating) {
+                  // Handle rating update
+                },
+              ),
+              RatingRow(
+                label: "생활/입지",
+                onRatingUpdate: (rating) {
+                  // Handle rating update
+                },
+              ),
               const SizedBox(height: 16),
               const Padding(
                 padding: EdgeInsets.only(bottom: 8.0),
@@ -248,8 +271,15 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              buildKeywordSelector("장점 키워드를 선택해 주세요", _strengthKeywords,
-                  _selectedStrengthKeywords),
+              KeywordSelector(
+                title: "장점 키워드를 선택해 주세요",
+                keywords: _strengthKeywords,
+                selectedKeywords: _selectedStrengthKeywords,
+                onSelected: (keyword, selected) {
+                  _onKeywordSelected(
+                      keyword, selected, _selectedStrengthKeywords);
+                },
+              ),
               const SizedBox(height: 16),
               const Padding(
                 padding: EdgeInsets.only(bottom: 8.0),
@@ -267,8 +297,15 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              buildKeywordSelector("단점 키워드를 선택해 주세요", _weaknessKeywords,
-                  _selectedWeaknessKeywords),
+              KeywordSelector(
+                title: "단점 키워드를 선택해 주세요",
+                keywords: _weaknessKeywords,
+                selectedKeywords: _selectedWeaknessKeywords,
+                onSelected: (keyword, selected) {
+                  _onKeywordSelected(
+                      keyword, selected, _selectedWeaknessKeywords);
+                },
+              ),
               const SizedBox(height: 16),
               const Center(
                 child: Padding(
@@ -321,9 +358,7 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () {
-                  // 리뷰 제출 로직
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -341,135 +376,6 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  IconData _getIconForKeyword(String keyword) {
-    switch (keyword) {
-      case '없음':
-        return Icons.block;
-      case '주차':
-        return Icons.local_parking;
-      case '대중교통':
-        return Icons.directions_bus;
-      case '공원산책':
-        return Icons.park;
-      case '치안':
-        return Icons.security;
-      case '경비실':
-        return Icons.home;
-      case '건물관리':
-        return Icons.build;
-      case '분리수거':
-        return Icons.delete;
-      case '환기':
-        return Icons.air;
-      case '방음':
-        return Icons.volume_off;
-      case '단열' || '결로':
-        return Icons.ac_unit;
-      case '반려동물 키우기':
-        return Icons.pets;
-      case '방충':
-        return Icons.bug_report;
-      case '엘리베이터':
-        return Icons.elevator;
-      case '조용한 동네':
-        return Icons.local_hotel;
-      case '평지' || '언덕':
-        return Icons.directions_walk;
-      case '마트 · 편의점':
-        return Icons.store;
-      case '벌레':
-        return Icons.bug_report;
-      case '층간소음' || '동네소음':
-        return Icons.hearing;
-      default:
-        return Icons.help_outline;
-    }
-  }
-
-  Widget buildRatingRow(String label) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 3,
-            child: Text(label),
-          ),
-          Expanded(
-            flex: 7,
-            child: RatingBar.builder(
-              initialRating: 0,
-              minRating: 1,
-              direction: Axis.horizontal,
-              allowHalfRating: true,
-              itemCount: 5,
-              itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-              itemBuilder: (context, _) =>
-                  const Icon(Icons.star, color: Colors.amber),
-              onRatingUpdate: (rating) {},
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildKeywordSelector(
-      String title, List<String> keywords, Set<String> selectedKeywords) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-        Wrap(
-          spacing: 8.0,
-          runSpacing: 4.0,
-          children: keywords.map((keyword) {
-            final bool isSelected = selectedKeywords.contains(keyword);
-            return ChoiceChip(
-              label: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    _getIconForKeyword(keyword),
-                    size: 16,
-                    color: isSelected ? Colors.white : Colors.black,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    keyword,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: isSelected ? Colors.white : Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-              selected: isSelected,
-              onSelected: (bool selected) {
-                setState(() {
-                  if (selected) {
-                    selectedKeywords.add(keyword);
-                  } else {
-                    selectedKeywords.remove(keyword);
-                  }
-                });
-              },
-              showCheckmark: false,
-              selectedColor: Colors.blue,
-              backgroundColor: Colors.grey[200],
-            );
-          }).toList(),
-        ),
-      ],
     );
   }
 }
