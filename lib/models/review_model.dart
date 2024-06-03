@@ -32,9 +32,9 @@ class ReviewModel {
       advantage: json["advantage"],
       disadvantage: json["disadvantage"],
       createdAt: json["createdAt"],
-      residenceType: json["residenceType"],
-      residenceYear: json["residenceYear"],
-      residenceFloor: json["residenceFloor"],
+      residenceType: json["residenceType"] ?? '',
+      residenceYear: json["residenceYear"] ?? '',
+      residenceFloor: json["residenceFloor"] ?? '',
       overallRating: json["overallRating"]?.toDouble() ?? 0.0,
       advantageKeywords: List<String>.from(json["advantageKeywords"] ?? []),
       disadvantageKeywords:

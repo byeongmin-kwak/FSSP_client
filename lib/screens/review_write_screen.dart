@@ -14,7 +14,6 @@ class ReviewWriteScreen extends StatefulWidget {
 
 class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
   String? _selectedAddress;
-  String? _selectedResidenceType;
   String? _selectedResidenceYear;
   String? _selectedResidenceFloor;
   final TextEditingController _advantagesController = TextEditingController();
@@ -71,7 +70,6 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
   Future<void> _submitReview() async {
     final reviewData = {
       'address': _selectedAddress,
-      'residenceType': _selectedResidenceType,
       'residenceYear': _selectedResidenceYear,
       'residenceFloor': _selectedResidenceFloor,
       'advantage': _advantagesController.text,
@@ -81,14 +79,10 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
       'overallRating': _overallRating,
     };
 
-    final success = await ApiService.submitReview(reviewData);
-
-    if (success) {
-      print('Review submitted successfully');
-      // 제출 성공 처리
-    } else {
-      print('Failed to submit review');
-      // 제출 실패 처리
+    try {
+      await ApiService.submitReview(reviewData);
+    } catch (e) {
+      print('Error: $e');
     }
   }
 

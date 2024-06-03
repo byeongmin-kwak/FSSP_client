@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:FSSP_cilent/models/review_model.dart';
 
-class Review extends StatelessWidget {
-  final String id, address, advantage, disadvantage;
+class ReviewWidget extends StatelessWidget {
+  final ReviewModel review;
 
-  const Review({
+  const ReviewWidget({
     super.key,
-    required this.id,
-    required this.address,
-    required this.advantage,
-    required this.disadvantage,
+    required this.review,
   });
 
   @override
@@ -35,14 +33,14 @@ class Review extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              address,
+              review.address,
               style: const TextStyle(
                 fontSize: 22,
               ),
             ),
             const SizedBox(height: 10),
             Text(
-              '장점: $advantage',
+              '장점: ${review.advantage}',
               style: const TextStyle(
                 fontSize: 18,
                 color: Colors.green,
@@ -52,7 +50,7 @@ class Review extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              '단점: $disadvantage',
+              '단점: ${review.disadvantage}',
               style: const TextStyle(
                 fontSize: 18,
                 color: Colors.red,

@@ -11,31 +11,31 @@ class ApiService {
 
   // 메인페이지에서의 최신 리뷰 조회
   static Future<List<ReviewModel>> getLatestReviews() async {
-    List<ReviewModel> reviewInstances = [];
     final url = Uri.parse('$baseUrl/api/latest-reviews');
     final response = await http.get(url);
+
     if (response.statusCode == 200) {
-      final reviews = jsonDecode(response.body);
-      for (var review in reviews) {
-        final instance = ReviewModel.fromJson(review);
-        reviewInstances.add(instance);
-      }
-      return reviewInstances;
+      final List<dynamic> reviewsJson =
+          jsonDecode(response.body) as List<dynamic>;
+      List<ReviewModel> reviews =
+          reviewsJson.map((json) => ReviewModel.fromJson(json)).toList();
+      return reviews;
     } else {
-      throw Error();
+      throw Exception('Failed to load reviews');
     }
   }
 
   // 지도에서 리뷰 조회
-  static Future<List> fetchReviews(double northEastLat, double northEastLng,
-      double southWestLat, double southWestLng) async {
+  static Future<List<ReviewModel>> fetchReviews(double northEastLat,
+      double northEastLng, double southWestLat, double southWestLng) async {
     final response = await http.get(
       Uri.parse(
           '$baseUrl/api/map-reviews/?northEastLat=$northEastLat&northEastLng=$northEastLng&southWestLat=$southWestLat&southWestLng=$southWestLng'),
     );
 
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      final List<dynamic> reviews = jsonDecode(response.body);
+      return reviews.map((review) => ReviewModel.fromJson(review)).toList();
     } else {
       throw Exception('Failed to fetch reviews');
     }
@@ -72,7 +72,7 @@ class ApiService {
       final buildingData = jsonResponse['response']['body']['items']['item'];
       return BuildingModel.fromJson(buildingData);
     } else {
-      throw Error();
+      throw Exception('Failed to load building information');
     }
   }
 
@@ -87,6 +87,6 @@ class ApiService {
       body: jsonEncode(reviewData),
     );
 
-    return response.statusCode == 200;
+    return response.statusCode == 201;
   }
 }

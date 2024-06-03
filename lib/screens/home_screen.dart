@@ -148,11 +148,8 @@ class HomeScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       itemBuilder: (context, index) {
         var review = snapshot.data![index];
-        return Review(
-          id: review.id,
-          address: review.address,
-          advantage: review.advantage,
-          disadvantage: review.disadvantage,
+        return ReviewWidget(
+          review: review,
         );
       },
       separatorBuilder: (context, index) => const SizedBox(
