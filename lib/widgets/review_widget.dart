@@ -9,6 +9,30 @@ class ReviewWidget extends StatelessWidget {
     required this.review,
   });
 
+  Widget _buildKeywords(List<String> keywords, Color color) {
+    return Wrap(
+      spacing: 4.0,
+      runSpacing: 2.0,
+      children: keywords.map((keyword) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(6.0),
+          ),
+          child: Text(
+            keyword,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 12.0,
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -35,7 +59,7 @@ class ReviewWidget extends StatelessWidget {
             Text(
               review.address,
               style: const TextStyle(
-                fontSize: 22,
+                fontSize: 18,
               ),
             ),
             const SizedBox(height: 10),
@@ -49,6 +73,8 @@ class ReviewWidget extends StatelessWidget {
               maxLines: 2,
             ),
             const SizedBox(height: 10),
+            _buildKeywords(review.advantageKeywords, Colors.green),
+            const SizedBox(height: 10),
             Text(
               '단점: ${review.disadvantage}',
               style: const TextStyle(
@@ -58,6 +84,8 @@ class ReviewWidget extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ),
+            const SizedBox(height: 10),
+            _buildKeywords(review.disadvantageKeywords, Colors.red),
           ],
         ),
       ),
