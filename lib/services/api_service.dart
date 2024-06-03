@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:FSSP_cilent/models/building_model.dart';
 import 'package:FSSP_cilent/models/review_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -58,8 +57,6 @@ class ApiService {
       throw Exception('Address not found');
     }
 
-    print(buildingData);
-
     final String sigunguCd = buildingData['SIGUNGU_CD'];
     final String bjdongCd = buildingData['BJDONG_CD'];
     final String bun = buildingData['BUN'];
@@ -69,7 +66,6 @@ class ApiService {
       Uri.parse(
           'http://apis.data.go.kr/1613000/BldRgstService_v2/getBrTitleInfo?sigunguCd=$sigunguCd&bjdongCd=$bjdongCd&bun=$bun&ji=$ji&_type=json&ServiceKey=$serviceKey'),
     );
-    print('-----------------${response.body}');
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final buildingData = jsonResponse['response']['body']['items']['item'];

@@ -87,10 +87,36 @@ class HomeScreen extends StatelessWidget {
           ),
           const Text("#수원시 #영통구"),
           const Text("관심 지역 리뷰"),
-          const Row(
-            children: [],
+          Expanded(
+            child: FutureBuilder<List<ReviewModel>>(
+              future: reviews,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                } else if (snapshot.hasData) {
+                  return makeList(snapshot);
+                } else {
+                  return const Center(
+                    child: Text('No reviews available'),
+                  );
+                }
+              },
+            ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // 여기에 버튼을 눌렀을 때 수행할 작업을 정의합니다.
+        },
+        backgroundColor: Colors.blue,
+        child: const Icon(Icons.edit),
       ),
     );
   }
