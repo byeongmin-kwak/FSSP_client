@@ -29,6 +29,55 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
   String? _selectedResidenceType;
   String? _selectedResidenceYear;
   String? _selectedResidenceFloor;
+  final TextEditingController _strengthsController = TextEditingController();
+  final TextEditingController _weaknessesController = TextEditingController();
+
+  final List<String> _strengthKeywords = [
+    '없음',
+    '주차',
+    '대중교통',
+    '공원산책',
+    '치안',
+    '경비실',
+    '건물관리',
+    '분리수거',
+    '환기',
+    '방음',
+    '단열',
+    '반려동물 키우기',
+    '방충',
+    '엘리베이터',
+    '조용한 동네',
+    '평지',
+    '마트 · 편의점',
+  ];
+
+  final List<String> _weaknessKeywords = [
+    '없음',
+    '주차',
+    '대중교통',
+    '공원산책',
+    '치안',
+    '경비실',
+    '건물관리',
+    '분리수거',
+    '환기',
+    '결로',
+    '단열',
+    '반려동물 키우기',
+    '벌레',
+    '층간소음',
+    '엘리베이터',
+    '동네소음',
+    '언덕',
+    '마트 · 편의점',
+  ];
+
+  final Set<String> _selectedStrengthKeywords = {};
+  final Set<String> _selectedWeaknessKeywords = {};
+
+  double _overallRating = 0;
+  String _ratingFeedback = '';
 
   @override
   Widget build(BuildContext context) {
@@ -183,6 +232,94 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
               buildRatingRow("치안"),
               buildRatingRow("생활/입지"),
               const SizedBox(height: 16),
+              const Padding(
+                padding: EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  "장점 (10자 이상)",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              TextFormField(
+                controller: _strengthsController,
+                maxLines: 5,
+                decoration: const InputDecoration(
+                  hintText: '예시) 층간소음 한 번도 겪은 적 없어요! 방음이 좋아요',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 8),
+              buildKeywordSelector("장점 키워드를 선택해 주세요", _strengthKeywords,
+                  _selectedStrengthKeywords),
+              const SizedBox(height: 16),
+              const Padding(
+                padding: EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  "단점 (10자 이상)",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              TextFormField(
+                controller: _weaknessesController,
+                maxLines: 5,
+                decoration: const InputDecoration(
+                  hintText: '예시) 층간소음이 심해요. 대화부터 발소리까지 들려요',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 8),
+              buildKeywordSelector("단점 키워드를 선택해 주세요", _weaknessKeywords,
+                  _selectedWeaknessKeywords),
+              const SizedBox(height: 16),
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    "이 집의 총 별점은?",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              Center(
+                child: RatingBar.builder(
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemBuilder: (context, _) => const Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: (rating) {
+                    setState(() {
+                      _overallRating = rating;
+                      if (rating == 5) {
+                        _ratingFeedback = "최고에요! 😍";
+                      } else if (rating >= 4) {
+                        _ratingFeedback = "좋아요 😊";
+                      } else if (rating >= 3) {
+                        _ratingFeedback = "괜찮아요 🙂";
+                      } else if (rating >= 2) {
+                        _ratingFeedback = "별로에요 😕";
+                      } else {
+                        _ratingFeedback = "최악이에요 😡";
+                      }
+                    });
+                  },
+                ),
+              ),
+              Center(
+                child: Text(
+                  _ratingFeedback,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   // 리뷰 제출 로직
@@ -191,13 +328,65 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
                   backgroundColor: Colors.blue,
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                 ),
-                child: const Text('다음'),
+                child: const Text(
+                  '제출하기',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  IconData _getIconForKeyword(String keyword) {
+    switch (keyword) {
+      case '없음':
+        return Icons.block;
+      case '주차':
+        return Icons.local_parking;
+      case '대중교통':
+        return Icons.directions_bus;
+      case '공원산책':
+        return Icons.park;
+      case '치안':
+        return Icons.security;
+      case '경비실':
+        return Icons.home;
+      case '건물관리':
+        return Icons.build;
+      case '분리수거':
+        return Icons.delete;
+      case '환기':
+        return Icons.air;
+      case '방음':
+        return Icons.volume_off;
+      case '단열' || '결로':
+        return Icons.ac_unit;
+      case '반려동물 키우기':
+        return Icons.pets;
+      case '방충':
+        return Icons.bug_report;
+      case '엘리베이터':
+        return Icons.elevator;
+      case '조용한 동네':
+        return Icons.local_hotel;
+      case '평지' || '언덕':
+        return Icons.directions_walk;
+      case '마트 · 편의점':
+        return Icons.store;
+      case '벌레':
+        return Icons.bug_report;
+      case '층간소음' || '동네소음':
+        return Icons.hearing;
+      default:
+        return Icons.help_outline;
+    }
   }
 
   Widget buildRatingRow(String label) {
@@ -220,13 +409,67 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
               itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
               itemBuilder: (context, _) =>
                   const Icon(Icons.star, color: Colors.amber),
-              onRatingUpdate: (rating) {
-                print(rating);
-              },
+              onRatingUpdate: (rating) {},
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget buildKeywordSelector(
+      String title, List<String> keywords, Set<String> selectedKeywords) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        Wrap(
+          spacing: 8.0,
+          runSpacing: 4.0,
+          children: keywords.map((keyword) {
+            final bool isSelected = selectedKeywords.contains(keyword);
+            return ChoiceChip(
+              label: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    _getIconForKeyword(keyword),
+                    size: 16,
+                    color: isSelected ? Colors.white : Colors.black,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    keyword,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: isSelected ? Colors.white : Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              selected: isSelected,
+              onSelected: (bool selected) {
+                setState(() {
+                  if (selected) {
+                    selectedKeywords.add(keyword);
+                  } else {
+                    selectedKeywords.remove(keyword);
+                  }
+                });
+              },
+              showCheckmark: false,
+              selectedColor: Colors.blue,
+              backgroundColor: Colors.grey[200],
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 }
