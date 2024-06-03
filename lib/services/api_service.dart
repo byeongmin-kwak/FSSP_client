@@ -43,7 +43,8 @@ class ApiService {
 
   // 건물 정보 조회
   static Future<BuildingModel> getBuildingInfo(String address) async {
-    final jsonString = await rootBundle.loadString('lib/경기도 수원시 영통구.json');
+    final jsonString =
+        await rootBundle.loadString('lib/assets/경기도 수원시 영통구.json');
     final Map<String, dynamic> jsonMap = json.decode(jsonString);
     final List<dynamic> data = jsonMap['Data'];
 

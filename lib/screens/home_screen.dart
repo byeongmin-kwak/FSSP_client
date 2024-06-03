@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:FSSP_cilent/screens/building_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:FSSP_cilent/models/review_model.dart';
@@ -22,34 +24,48 @@ class HomeScreen extends StatelessWidget {
               color: Colors.blue.shade300,
               size: 40,
             ),
+            const SizedBox(
+              width: 8,
+            ),
             const Text(
               "집사",
             ),
+            const SizedBox(
+              width: 8,
+            ),
+            Image.asset(
+              'lib/assets/image.png',
+              width: 40,
+              height: 40,
+            )
           ],
         ),
       ),
       body: Column(
         children: [
-          SearchBar(
-            trailing: const [Icon(Icons.search)],
-            hintText: "주소를 검색해주세요.",
-            onTap: () async {
-              KopoModel? model = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RemediKopo(),
-                ),
-              );
-              if (model != null) {
-                String? address = model.address;
-                Navigator.push(
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: SearchBar(
+              trailing: const [Icon(Icons.search)],
+              hintText: "주소를 검색해주세요.",
+              onTap: () async {
+                KopoModel? model = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => BuildingScreen(address: address!),
+                    builder: (context) => RemediKopo(),
                   ),
                 );
-              }
-            },
+                if (model != null) {
+                  String? address = model.address;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BuildingScreen(address: address!),
+                    ),
+                  );
+                }
+              },
+            ),
           ),
           const SizedBox(
             height: 30,
