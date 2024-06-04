@@ -32,19 +32,23 @@ class ReviewModel {
   factory ReviewModel.fromJson(Map<String, dynamic> json) {
     return ReviewModel(
       id: json["_id"],
-      address: json["address"],
-      advantage: json["advantage"],
-      disadvantage: json["disadvantage"],
+      address: json["address"] ?? '',
+      advantage: json["advantage"] ?? '',
+      disadvantage: json["disadvantage"] ?? '',
       createdAt: json["createdAt"],
       residenceType: json["residenceType"] ?? '',
       residenceYear: json["residenceYear"] ?? '',
       residenceFloor: json["residenceFloor"] ?? '',
-      overallRating: json["overallRating"]?.toDouble() ?? 0.0,
+      overallRating: (json["overallRating"] ?? 0.0).toDouble(),
       advantageKeywords: List<String>.from(json["advantageKeywords"] ?? []),
       disadvantageKeywords:
           List<String>.from(json["disadvantageKeywords"] ?? []),
-      latitude: json["latitude"]?.toDouble(),
-      longitude: json["longitude"]?.toDouble(),
+      latitude: json["latitude"] != null
+          ? double.parse(json["latitude"].toString())
+          : 0.0,
+      longitude: json["longitude"] != null
+          ? double.parse(json["longitude"].toString())
+          : 0.0,
     );
   }
 }

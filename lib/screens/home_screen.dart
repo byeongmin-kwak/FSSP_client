@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
@@ -83,27 +83,25 @@ class HomeScreen extends StatelessWidget {
             ),
             SizedBox(
               height: 275,
-              child: Expanded(
-                child: FutureBuilder<List<ReviewModel>>(
-                  future: reviews,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: Text('Error: ${snapshot.error}'),
-                      );
-                    } else if (snapshot.hasData) {
-                      return makeList(snapshot);
-                    } else {
-                      return const Center(
-                        child: Text('No reviews available'),
-                      );
-                    }
-                  },
-                ),
+              child: FutureBuilder<List<ReviewModel>>(
+                future: reviews,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error: ${snapshot.error}'),
+                    );
+                  } else if (snapshot.hasData) {
+                    return makeList(snapshot);
+                  } else {
+                    return const Center(
+                      child: Text('No reviews available'),
+                    );
+                  }
+                },
               ),
             ),
             const SizedBox(
@@ -113,28 +111,29 @@ class HomeScreen extends StatelessWidget {
             const Text("관심 지역 리뷰"),
             SizedBox(
               height: 275,
-              child: Expanded(
-                child: FutureBuilder<List<ReviewModel>>(
-                  future: reviews,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: Text('Error: ${snapshot.error}'),
-                      );
-                    } else if (snapshot.hasData) {
-                      return makeList(snapshot);
-                    } else {
-                      return const Center(
-                        child: Text('No reviews available'),
-                      );
-                    }
-                  },
-                ),
+              child: FutureBuilder<List<ReviewModel>>(
+                future: reviews,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error: ${snapshot.error}'),
+                    );
+                  } else if (snapshot.hasData) {
+                    return makeList(snapshot);
+                  } else {
+                    return const Center(
+                      child: Text('No reviews available'),
+                    );
+                  }
+                },
               ),
+            ),
+            const SizedBox(
+              height: 20,
             ),
           ],
         ),

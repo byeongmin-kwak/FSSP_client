@@ -16,11 +16,13 @@ class ApiService {
     final url = Uri.parse('$baseUrl/api/latest-reviews');
     final response = await http.get(url);
 
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final List<dynamic> reviewsJson =
           jsonDecode(response.body) as List<dynamic>;
       List<ReviewModel> reviews =
           reviewsJson.map((json) => ReviewModel.fromJson(json)).toList();
+      print(reviews);
       return reviews;
     } else {
       throw Exception('Failed to load reviews');
