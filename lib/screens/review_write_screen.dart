@@ -69,6 +69,10 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
   String _ratingFeedback = '';
 
   Future<void> _submitReview() async {
+    // 주소를 이용해 위도와 경도 가져오기
+    Map<String, dynamic> coordinates =
+        await ApiService().getCoordinatesFromAddress(_selectedAddress!);
+
     final reviewData = {
       'address': _selectedAddress,
       'residenceYear': _selectedResidenceYear,
@@ -78,6 +82,8 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
       'advantageKeywords': _selectedadvantageKeywords.toList(),
       'disadvantageKeywords': _selecteddisadvantageKeywords.toList(),
       'overallRating': _overallRating,
+      'latitude': coordinates['latitude'],
+      'longitude': coordinates['longitude'],
     };
 
     try {

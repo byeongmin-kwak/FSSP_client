@@ -10,6 +10,8 @@ class ReviewModel {
   final double overallRating;
   final List<String> advantageKeywords;
   final List<String> disadvantageKeywords;
+  final double latitude;
+  final double longitude;
 
   ReviewModel({
     required this.id,
@@ -23,6 +25,8 @@ class ReviewModel {
     required this.overallRating,
     required this.advantageKeywords,
     required this.disadvantageKeywords,
+    required this.latitude,
+    required this.longitude,
   });
 
   factory ReviewModel.fromJson(Map<String, dynamic> json) {
@@ -39,6 +43,8 @@ class ReviewModel {
       advantageKeywords: List<String>.from(json["advantageKeywords"] ?? []),
       disadvantageKeywords:
           List<String>.from(json["disadvantageKeywords"] ?? []),
+      latitude: json["latitude"]?.toDouble(),
+      longitude: json["longitude"]?.toDouble(),
     );
   }
 }
