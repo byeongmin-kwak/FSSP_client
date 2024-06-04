@@ -11,11 +11,11 @@ class ReviewWidget extends StatelessWidget {
 
   Widget _buildKeywords(List<String> keywords, Color color) {
     return Wrap(
-      spacing: 4.0,
-      runSpacing: 2.0,
+      spacing: 6.0,
+      runSpacing: 4.0,
       children: keywords.map((keyword) {
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(6.0),
@@ -39,16 +39,16 @@ class ReviewWidget extends StatelessWidget {
       onTap: () {},
       child: Container(
         width: 300,
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(16),
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
           color: Colors.white,
           boxShadow: [
             BoxShadow(
               blurRadius: 15,
               offset: const Offset(5, 5),
-              color: Colors.black.withOpacity(0.5),
+              color: Colors.black.withOpacity(0.1),
             ),
           ],
         ),
@@ -60,13 +60,15 @@ class ReviewWidget extends StatelessWidget {
               review.address,
               style: const TextStyle(
                 fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
             ),
             const SizedBox(height: 10),
             Text(
               '장점: ${review.advantage}',
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 color: Colors.green,
               ),
               overflow: TextOverflow.ellipsis,
@@ -78,7 +80,7 @@ class ReviewWidget extends StatelessWidget {
             Text(
               '단점: ${review.disadvantage}',
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 color: Colors.red,
               ),
               overflow: TextOverflow.ellipsis,

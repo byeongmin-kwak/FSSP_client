@@ -42,91 +42,99 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: SearchBar(
-              trailing: const [Icon(Icons.search)],
-              hintText: "주소를 검색해주세요.",
-              onTap: () async {
-                KopoModel? model = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RemediKopo(),
-                  ),
-                );
-                if (model != null) {
-                  String? address = model.address;
-                  Navigator.push(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: SearchBar(
+                trailing: const [Icon(Icons.search)],
+                hintText: "주소를 검색해주세요.",
+                onTap: () async {
+                  KopoModel? model = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => BuildingScreen(address: address!),
+                      builder: (context) => RemediKopo(),
                     ),
                   );
-                }
-              },
+                  if (model != null) {
+                    String? address = model.address;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BuildingScreen(address: address!),
+                      ),
+                    );
+                  }
+                },
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          const Text(
-            "#원룸 #오피스텔 #아파트",
-          ),
-          const Text(
-            "최신 리뷰",
-          ),
-          Expanded(
-            child: FutureBuilder<List<ReviewModel>>(
-              future: reviews,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error: ${snapshot.error}'),
-                  );
-                } else if (snapshot.hasData) {
-                  return makeList(snapshot);
-                } else {
-                  return const Center(
-                    child: Text('No reviews available'),
-                  );
-                }
-              },
+            const SizedBox(
+              height: 30,
             ),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          const Text("#수원시 #영통구"),
-          const Text("관심 지역 리뷰"),
-          Expanded(
-            child: FutureBuilder<List<ReviewModel>>(
-              future: reviews,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error: ${snapshot.error}'),
-                  );
-                } else if (snapshot.hasData) {
-                  return makeList(snapshot);
-                } else {
-                  return const Center(
-                    child: Text('No reviews available'),
-                  );
-                }
-              },
+            const Text(
+              "#원룸 #오피스텔 #아파트",
             ),
-          ),
-        ],
+            const Text(
+              "최신 리뷰",
+            ),
+            SizedBox(
+              height: 275,
+              child: Expanded(
+                child: FutureBuilder<List<ReviewModel>>(
+                  future: reviews,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    } else if (snapshot.hasData) {
+                      return makeList(snapshot);
+                    } else {
+                      return const Center(
+                        child: Text('No reviews available'),
+                      );
+                    }
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            const Text("#수원시 #영통구"),
+            const Text("관심 지역 리뷰"),
+            SizedBox(
+              height: 275,
+              child: Expanded(
+                child: FutureBuilder<List<ReviewModel>>(
+                  future: reviews,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    } else if (snapshot.hasData) {
+                      return makeList(snapshot);
+                    } else {
+                      return const Center(
+                        child: Text('No reviews available'),
+                      );
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
