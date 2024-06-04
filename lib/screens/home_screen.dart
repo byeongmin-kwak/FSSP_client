@@ -45,6 +45,9 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(
+              height: 10,
+            ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               child: SearchBar(

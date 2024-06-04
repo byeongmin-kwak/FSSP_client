@@ -8,6 +8,8 @@ import 'package:flutter/services.dart' show rootBundle;
 class ApiService {
   static final String baseUrl = dotenv.get("BASE_URL");
   static final String serviceKey = dotenv.get("SERVICE_KEY");
+  static final String clientId = dotenv.get("CLIENT_ID");
+  static final String clientSecret = dotenv.get("CLIENT_SECRET");
 
   // 메인페이지에서의 최신 리뷰 조회
   static Future<List<ReviewModel>> getLatestReviews() async {
@@ -88,5 +90,31 @@ class ApiService {
     );
 
     return response.statusCode == 201;
+  }
+
+  // 주소로 위도, 경도 찾기
+  Future<Map<String, dynamic>> getCoordinatesFromAddress(String address) async {
+    final url = Uri.parse(
+        'https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=$address');
+
+    final headers = {
+      'X-NCP-APIGW-API-KEY-ID': clientId,
+      'X-NCP-APIGW-API-KEY': clientSecret,
+    };
+
+    final response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      if (data['addresses'].isEmpty) {
+        return {'latitude': null, 'longitude': null};
+      }
+
+      double latitude = double.parse(data['addresses'][0]['y']);
+      double longitude = double.parse(data['addresses'][0]['x']);
+      return {'latitude': latitude, 'longitude': longitude};
+    } else {
+      throw Exception('Failed to fetch coordinates');
+    }
   }
 }
