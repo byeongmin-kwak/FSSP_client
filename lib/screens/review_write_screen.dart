@@ -1,3 +1,4 @@
+import 'package:FSSP_cilent/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -84,6 +85,11 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
     } catch (e) {
       print('Error: $e');
     }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomeScreen()),
+    );
   }
 
   void _onKeywordSelected(
