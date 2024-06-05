@@ -38,9 +38,13 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _widgetOptions,
+      body: Navigator(
+        key: GlobalKey<NavigatorState>(),
+        onGenerateRoute: (RouteSettings settings) {
+          return MaterialPageRoute(
+            builder: (context) => _widgetOptions[_selectedIndex],
+          );
+        },
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

@@ -7,16 +7,18 @@ void main() async {
   await dotenv.load(fileName: ".env");
   String clientId = dotenv.get("CLIENT_ID");
   await NaverMapSdk.instance.initialize(clientId: clientId);
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+  final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: BottomNavWidget(
+    return MaterialApp(
+      navigatorObservers: [routeObserver],
+      home: const BottomNavWidget(
         initialIndex: 0,
       ),
     );

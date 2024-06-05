@@ -10,9 +10,33 @@ class MapScreen extends StatefulWidget {
   _MapScreenState createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends State<MapScreen> with RouteAware {
   late NaverMapController _mapController;
   OverlayEntry? _infoWindowOverlay;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    RouteObserver().subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void dispose() {
+    RouteObserver().unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    // 다른 화면에서 돌아왔을 때
+    _removeInfoWindow();
+  }
+
+  @override
+  void didPushNext() {
+    // 다른 화면으로 이동했을 때
+    _removeInfoWindow();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +130,7 @@ class _MapScreenState extends State<MapScreen> {
 
     final overlay = OverlayEntry(
       builder: (context) => Positioned(
-        top: MediaQuery.of(context).size.height / 2, // 지도 위에 정보창을 표시할 위치
+        bottom: 100,
         left: MediaQuery.of(context).size.width / 2 - 100, // 중앙에 맞추기 위해 조정
         child: InfoWindowWidget(
           address: address,
@@ -117,5 +141,12 @@ class _MapScreenState extends State<MapScreen> {
 
     Overlay.of(context).insert(overlay);
     _infoWindowOverlay = overlay;
+  }
+
+  void _removeInfoWindow() {
+    if (_infoWindowOverlay != null) {
+      _infoWindowOverlay!.remove();
+      _infoWindowOverlay = null;
+    }
   }
 }
