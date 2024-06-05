@@ -16,13 +16,11 @@ class ApiService {
     final url = Uri.parse('$baseUrl/api/latest-reviews');
     final response = await http.get(url);
 
-    print(response.statusCode);
     if (response.statusCode == 200) {
       final List<dynamic> reviewsJson =
           jsonDecode(response.body) as List<dynamic>;
       List<ReviewModel> reviews =
           reviewsJson.map((json) => ReviewModel.fromJson(json)).toList();
-      print(reviews);
       return reviews;
     } else {
       throw Exception('Failed to load reviews');
@@ -38,8 +36,10 @@ class ApiService {
     );
 
     if (response.statusCode == 200) {
-      final List<dynamic> reviews = jsonDecode(response.body);
-      return reviews.map((review) => ReviewModel.fromJson(review)).toList();
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      final List<dynamic> reviewsJson = responseData['reviews'];
+      print(reviewsJson);
+      return reviewsJson.map((json) => ReviewModel.fromJson(json)).toList();
     } else {
       throw Exception('Failed to fetch reviews');
     }

@@ -1,3 +1,4 @@
+import 'package:FSSP_cilent/widgets/info_window_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:FSSP_cilent/services/api_service.dart';
@@ -11,22 +12,34 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   late NaverMapController _mapController;
+  OverlayEntry? _infoWindowOverlay;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NaverMap(
-        options: const NaverMapViewOptions(
-          initialCameraPosition: NCameraPosition(
-              target: NLatLng(37.247949112203, 127.07700000000),
-              zoom: 15,
-              bearing: 0,
-              tilt: 0),
-        ),
-        onMapReady: (controller) {
-          _mapController = controller;
-          _fetchReviews(); // 지도가 준비되었을 때 리뷰를 가져옵니다.
-        },
+      body: Stack(
+        children: [
+          NaverMap(
+            options: const NaverMapViewOptions(
+              initialCameraPosition: NCameraPosition(
+                target: NLatLng(37.247949112203, 127.07700000000),
+                zoom: 15,
+                bearing: 0,
+                tilt: 0,
+              ),
+            ),
+            onMapReady: (controller) {
+              _mapController = controller;
+              _fetchReviews(); // 지도가 준비되었을 때 리뷰를 가져옵니다.
+            },
+            onMapTapped: (point, latLng) {
+              if (_infoWindowOverlay != null) {
+                _infoWindowOverlay!.remove();
+                _infoWindowOverlay = null;
+              }
+            },
+          ),
+        ],
       ),
     );
   }
@@ -36,7 +49,7 @@ class _MapScreenState extends State<MapScreen> {
     final position = await _mapController.getCameraPosition();
     final target = position.target;
 
-    // 여기서는 임의로 경계 범위를 설정합니다.
+    // 임의로 경계 범위를 설정합니다.
     final bounds = NLatLngBounds(
       southWest: NLatLng(target.latitude - 0.01, target.longitude - 0.01),
       northEast: NLatLng(target.latitude + 0.01, target.longitude + 0.01),
@@ -60,20 +73,49 @@ class _MapScreenState extends State<MapScreen> {
     List<NMarker> markers = [];
 
     for (var review in reviews) {
-      NLatLng position = NLatLng(review['latitude'], review['longitude']);
-      markers.add(NMarker(
-        id: "id",
-        position: position,
-        caption: NOverlayCaption(
-          text: review['reviewText'],
-        ),
-        icon: const NOverlayImage.fromAssetImage('assets/marker_icon.png'),
-      ));
+      if (review.latitude != null && review.longitude != null) {
+        NLatLng position = NLatLng(review.latitude, review.longitude);
+        NMarker marker = NMarker(
+          id: review.id.toString(),
+          position: position,
+        );
+
+        marker.setOnTapListener((overlay) {
+          _showCustomInfoWindow(
+            review.address,
+            review.overallRating,
+            position,
+          );
+        });
+
+        markers.add(marker);
+        print('Adding marker at ${review.latitude}, ${review.longitude}');
+      }
     }
 
     setState(() {
       _mapController.clearOverlays();
       _mapController.addOverlayAll(Set.from(markers));
     });
+  }
+
+  void _showCustomInfoWindow(String address, double rating, NLatLng position) {
+    if (_infoWindowOverlay != null) {
+      _infoWindowOverlay!.remove();
+    }
+
+    final overlay = OverlayEntry(
+      builder: (context) => Positioned(
+        top: MediaQuery.of(context).size.height / 2, // 지도 위에 정보창을 표시할 위치
+        left: MediaQuery.of(context).size.width / 2 - 100, // 중앙에 맞추기 위해 조정
+        child: InfoWindowWidget(
+          address: address,
+          rating: rating,
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(overlay);
+    _infoWindowOverlay = overlay;
   }
 }

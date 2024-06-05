@@ -35,7 +35,7 @@ class ReviewModel {
       address: json["address"] ?? '',
       advantage: json["advantage"] ?? '',
       disadvantage: json["disadvantage"] ?? '',
-      createdAt: json["createdAt"],
+      createdAt: json["createdAt"] ?? '',
       residenceType: json["residenceType"] ?? '',
       residenceYear: json["residenceYear"] ?? '',
       residenceFloor: json["residenceFloor"] ?? '',
