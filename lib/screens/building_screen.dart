@@ -6,9 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BuildingScreen extends StatefulWidget {
-  final String address;
+  final String address, bcode, jibunAddress, buildingName;
 
-  const BuildingScreen({super.key, required this.address});
+  const BuildingScreen({
+    super.key,
+    required this.address,
+    required this.bcode,
+    required this.jibunAddress,
+    required this.buildingName,
+  });
 
   @override
   State<BuildingScreen> createState() => _BuildingScreenState();
@@ -37,7 +43,8 @@ class _BuildingScreenState extends State<BuildingScreen> {
   void initState() {
     super.initState();
     initPrefs();
-    buildingInfo = ApiService.getBuildingInfo(widget.address);
+    buildingInfo = ApiService.getBuildingInfo(
+        widget.address, widget.bcode, widget.jibunAddress);
   }
 
   onHeartTap() async {

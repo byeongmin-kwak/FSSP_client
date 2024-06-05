@@ -46,27 +46,34 @@ class ApiService {
   }
 
   // 건물 정보 조회
-  static Future<BuildingModel> getBuildingInfo(String address) async {
-    final jsonString =
-        await rootBundle.loadString('lib/assets/경기도 수원시 영통구.json');
-    final Map<String, dynamic> jsonMap = json.decode(jsonString);
-    final List<dynamic> data = jsonMap['Data'];
+  static Future<BuildingModel> getBuildingInfo(
+    String address,
+    String bcode,
+    String jibunAddress,
+  ) async {
+    //건물 조회에 필요한 시군구코드, 법정동코드, 번, 지 구하기
+    final String sigunguCd = bcode.substring(0, 5);
+    final String bjdongCd = bcode.substring(5, 10);
 
-    // 주소로 데이터 찾기
-    final buildingData = data.firstWhere(
-      (element) => element['NEW_PLAT_PLC'] == address,
-      orElse: () => null,
-    );
+    // 공백으로 분리
+    List<String> parts = jibunAddress.split(' ');
 
-    if (buildingData == null) {
-      throw Exception('Address not found');
+    // 마지막 부분을 숫자로 인식하여 번과 지 추출
+    String lastPart = parts.last;
+    String bun = '';
+    String ji = '';
+
+    if (lastPart.contains('-')) {
+      // '-'로 분리하여 번과 지 추출
+      List<String> bunJi = lastPart.split('-');
+      bun = bunJi[0].padLeft(4, '0');
+      ji = bunJi[1].padLeft(4, '0');
+    } else {
+      // '-'가 없는 경우, 숫자 부분만 번으로 설정
+      bun = lastPart.padLeft(4, '0');
     }
 
-    final String sigunguCd = buildingData['SIGUNGU_CD'];
-    final String bjdongCd = buildingData['BJDONG_CD'];
-    final String bun = buildingData['BUN'];
-    final String ji = buildingData['JI'];
-
+    print('$sigunguCd, $bjdongCd, $bun, $ji');
     final response = await http.get(
       Uri.parse(
           'http://apis.data.go.kr/1613000/BldRgstService_v2/getBrTitleInfo?sigunguCd=$sigunguCd&bjdongCd=$bjdongCd&bun=$bun&ji=$ji&_type=json&ServiceKey=$serviceKey'),

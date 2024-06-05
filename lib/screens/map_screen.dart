@@ -135,11 +135,11 @@ class _MapScreenState extends State<MapScreen> with RouteAware {
         child: GestureDetector(
           onTap: () {
             _removeInfoWindow();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BuildingScreen(address: address)),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //       builder: (context) => BuildingScreen(address: address)),
+            // );
           },
           child: InfoWindowWidget(
             address: address,
