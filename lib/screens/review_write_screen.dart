@@ -68,6 +68,10 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
   double _overallRating = 0;
   String _ratingFeedback = '';
 
+  String? _bcode;
+  String? _jibunAddress;
+  String? _buildingName;
+
   Future<void> _submitReview() async {
     // 주소를 이용해 위도와 경도 가져오기
     Map<String, dynamic> coordinates =
@@ -84,6 +88,9 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
       'overallRating': _overallRating,
       'latitude': coordinates['latitude'],
       'longitude': coordinates['longitude'],
+      'bcode': _bcode,
+      'jibunAddress': _jibunAddress,
+      'buildingName': _buildingName,
     };
 
     try {
@@ -142,6 +149,9 @@ class _ReviewWriteScreenState extends State<ReviewWriteScreen> {
                       if (model != null) {
                         setState(() {
                           _selectedAddress = model.address;
+                          _bcode = model.bcode;
+                          _jibunAddress = model.jibunAddress;
+                          _buildingName = model.buildingName;
                         });
                       }
                     },
