@@ -109,6 +109,9 @@ class _MapScreenState extends State<MapScreen> with RouteAware {
           _showCustomInfoWindow(
             review.address,
             review.overallRating,
+            review.bcode,
+            review.jibunAddress,
+            review.buildingName,
             position,
           );
         });
@@ -123,7 +126,14 @@ class _MapScreenState extends State<MapScreen> with RouteAware {
     });
   }
 
-  void _showCustomInfoWindow(String address, double rating, NLatLng position) {
+  void _showCustomInfoWindow(
+    String address,
+    double rating,
+    String bcode,
+    String jibunAddress,
+    String buildingName,
+    NLatLng position,
+  ) {
     if (_infoWindowOverlay != null) {
       _infoWindowOverlay!.remove();
     }
@@ -135,11 +145,16 @@ class _MapScreenState extends State<MapScreen> with RouteAware {
         child: GestureDetector(
           onTap: () {
             _removeInfoWindow();
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //       builder: (context) => BuildingScreen(address: address)),
-            // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BuildingScreen(
+                        address: address,
+                        bcode: bcode,
+                        jibunAddress: jibunAddress,
+                        buildingName: buildingName,
+                      )),
+            );
           },
           child: InfoWindowWidget(
             address: address,
