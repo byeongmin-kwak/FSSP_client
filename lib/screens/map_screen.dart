@@ -1,3 +1,4 @@
+import 'package:FSSP_cilent/screens/building_screen.dart';
 import 'package:FSSP_cilent/widgets/info_window_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
@@ -113,7 +114,6 @@ class _MapScreenState extends State<MapScreen> with RouteAware {
         });
 
         markers.add(marker);
-        print('Adding marker at ${review.latitude}, ${review.longitude}');
       }
     }
 
@@ -130,11 +130,21 @@ class _MapScreenState extends State<MapScreen> with RouteAware {
 
     final overlay = OverlayEntry(
       builder: (context) => Positioned(
-        bottom: 100,
-        left: MediaQuery.of(context).size.width / 2 - 100, // 중앙에 맞추기 위해 조정
-        child: InfoWindowWidget(
-          address: address,
-          rating: rating,
+        bottom: 30,
+        left: MediaQuery.of(context).size.width / 2 - 100,
+        child: GestureDetector(
+          onTap: () {
+            _removeInfoWindow();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BuildingScreen(address: address)),
+            );
+          },
+          child: InfoWindowWidget(
+            address: address,
+            rating: rating,
+          ),
         ),
       ),
     );
