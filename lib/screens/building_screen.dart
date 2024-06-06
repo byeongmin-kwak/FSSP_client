@@ -134,6 +134,37 @@ class _BuildingScreenState extends State<BuildingScreen> {
     return sum / reviews.length;
   }
 
+  Widget _buildKeywords(List<String> keywords, Color color) {
+    return Wrap(
+      spacing: 6.0,
+      runSpacing: 4.0,
+      children: keywords.map((keyword) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(6.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                offset: const Offset(0, 3),
+                blurRadius: 5,
+              ),
+            ],
+          ),
+          child: Text(
+            keyword,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 12.0,
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,12 +177,13 @@ class _BuildingScreenState extends State<BuildingScreen> {
               onPressed: onHeartTap,
               icon: Icon(
                 isLiked ? Icons.favorite : Icons.favorite_outline,
+                size: 30,
               ))
         ],
         title: Text(
           widget.address,
           style: const TextStyle(
-            fontSize: 24,
+            fontSize: 22,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
@@ -173,11 +205,14 @@ class _BuildingScreenState extends State<BuildingScreen> {
                           Text(
                             widget.address,
                             style: const TextStyle(
-                              fontSize: 20,
+                              fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(widget.jibunAddress),
+                          Text(
+                            widget.jibunAddress,
+                            style: const TextStyle(fontSize: 18),
+                          ),
                         ],
                       ),
                     ),
@@ -194,7 +229,7 @@ class _BuildingScreenState extends State<BuildingScreen> {
                               const SizedBox(width: 5),
                               Text(
                                 averageRating.toStringAsFixed(1),
-                                style: const TextStyle(fontSize: 24),
+                                style: const TextStyle(fontSize: 28),
                               ),
                             ],
                           );
@@ -217,13 +252,14 @@ class _BuildingScreenState extends State<BuildingScreen> {
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.map, color: Colors.blue),
+                        Icon(Icons.map, color: Colors.blue, size: 28),
                         SizedBox(width: 10),
                         Text(
                           '지도에서 위치 확인',
                           style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
+                            fontSize: 18,
                           ),
                         ),
                       ],
@@ -257,6 +293,7 @@ class _BuildingScreenState extends State<BuildingScreen> {
                               ? Colors.white
                               : Colors.black,
                           fontWeight: FontWeight.bold,
+                          fontSize: 22,
                         ),
                       ),
                     ),
@@ -285,6 +322,7 @@ class _BuildingScreenState extends State<BuildingScreen> {
                               ? Colors.white
                               : Colors.black,
                           fontWeight: FontWeight.bold,
+                          fontSize: 22,
                         ),
                       ),
                     ),
@@ -321,7 +359,10 @@ class _BuildingScreenState extends State<BuildingScreen> {
                             ConnectionState.waiting) {
                           return const CircularProgressIndicator();
                         } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
+                          return Text(
+                            'Error: ${snapshot.error}',
+                            style: const TextStyle(fontSize: 18),
+                          );
                         } else if (snapshot.hasData) {
                           final building = snapshot.data!;
                           return Padding(
@@ -350,8 +391,8 @@ class _BuildingScreenState extends State<BuildingScreen> {
                             ),
                           );
                         } else {
-                          return const Text(
-                              'No building information available');
+                          return const Text('No building information available',
+                              style: TextStyle(fontSize: 18));
                         }
                       },
                     ),
@@ -379,7 +420,10 @@ class _BuildingScreenState extends State<BuildingScreen> {
                             ConnectionState.waiting) {
                           return const CircularProgressIndicator();
                         } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
+                          return Text(
+                            'Error: ${snapshot.error}',
+                            style: const TextStyle(fontSize: 18),
+                          );
                         } else if (snapshot.hasData) {
                           final reviews = snapshot.data!;
                           return ListView.builder(
@@ -398,34 +442,99 @@ class _BuildingScreenState extends State<BuildingScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '장점: ${review.advantage}',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.green),
+                                        '거주년도: ${review.residenceYear}',
+                                        style: const TextStyle(fontSize: 18),
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        '단점: ${review.disadvantage}',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.red),
+                                        '거주층수: ${review.residenceFloor}',
+                                        style: const TextStyle(fontSize: 18),
                                       ),
-                                      const SizedBox(height: 4),
-                                      Text('거주년도: ${review.residenceYear}'),
-                                      const SizedBox(height: 4),
-                                      Text('거주층수: ${review.residenceFloor}'),
                                       const SizedBox(height: 4),
                                       Row(
                                         children: [
-                                          Text('평점: ${review.overallRating}'),
+                                          Row(
+                                            children: [
+                                              ...List.generate(
+                                                review.overallRating.round(),
+                                                (index) => const Icon(
+                                                  Icons.star,
+                                                  color: Colors.yellow,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                              ...List.generate(
+                                                5 -
+                                                    review.overallRating
+                                                        .round(),
+                                                (index) => const Icon(
+                                                  Icons.star_border,
+                                                  color: Colors.yellow,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                           const SizedBox(width: 8),
-                                          const Icon(
-                                            Icons.star,
-                                            color: Colors.yellow,
-                                            size: 20,
+                                          Text(
+                                            review.overallRating
+                                                .toStringAsFixed(1),
+                                            style:
+                                                const TextStyle(fontSize: 18),
                                           ),
                                         ],
                                       ),
+                                      const SizedBox(height: 4),
+                                      RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            const TextSpan(
+                                              text: '장점: ',
+                                              style: TextStyle(
+                                                color: Colors.green,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: review.advantage,
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      _buildKeywords(review.advantageKeywords,
+                                          Colors.green),
+                                      const SizedBox(height: 4),
+                                      RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            const TextSpan(
+                                              text: '단점: ',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: review.disadvantage,
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      _buildKeywords(
+                                          review.disadvantageKeywords,
+                                          Colors.red),
                                     ],
                                   ),
                                 ),
@@ -433,7 +542,8 @@ class _BuildingScreenState extends State<BuildingScreen> {
                             },
                           );
                         } else {
-                          return const Text('No reviews available');
+                          return const Text('No reviews available',
+                              style: TextStyle(fontSize: 18));
                         }
                       },
                     ),
@@ -454,12 +564,15 @@ class _BuildingScreenState extends State<BuildingScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             key,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(value),
+          child: Text(
+            value,
+            style: const TextStyle(fontSize: 18),
+          ),
         ),
       ],
     );
