@@ -29,9 +29,11 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index != 3) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
