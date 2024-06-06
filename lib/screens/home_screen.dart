@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:FSSP_cilent/screens/building_screen.dart';
 import 'package:FSSP_cilent/screens/review_write_screen.dart';
 import 'package:flutter/material.dart';

@@ -3,7 +3,6 @@ import 'package:FSSP_cilent/models/building_model.dart';
 import 'package:FSSP_cilent/models/review_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/services.dart' show rootBundle;
 
 class ApiService {
   static final String baseUrl = dotenv.get("BASE_URL");
@@ -38,7 +37,6 @@ class ApiService {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       final List<dynamic> reviewsJson = responseData['reviews'];
-      print(reviewsJson);
       return reviewsJson.map((json) => ReviewModel.fromJson(json)).toList();
     } else {
       throw Exception('Failed to fetch reviews');
@@ -73,7 +71,6 @@ class ApiService {
       bun = lastPart.padLeft(4, '0');
     }
 
-    print('$sigunguCd, $bjdongCd, $bun, $ji');
     final response = await http.get(
       Uri.parse(
           'http://apis.data.go.kr/1613000/BldRgstService_v2/getBrTitleInfo?sigunguCd=$sigunguCd&bjdongCd=$bjdongCd&bun=$bun&ji=$ji&_type=json&ServiceKey=$serviceKey'),
@@ -124,6 +121,20 @@ class ApiService {
       return {'latitude': latitude, 'longitude': longitude};
     } else {
       throw Exception('Failed to fetch coordinates');
+    }
+  }
+
+  // 주소로 리뷰 조회
+  static Future<List<ReviewModel>> getReviewsByAddress(String address) async {
+    final url = Uri.parse('$baseUrl/api/reviews-by-address?address=$address');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> reviewsJson =
+          jsonDecode(response.body) as List<dynamic>;
+      return reviewsJson.map((json) => ReviewModel.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to fetch reviews');
     }
   }
 }

@@ -4,7 +4,6 @@ class ReviewModel {
   final String advantage;
   final String disadvantage;
   final String createdAt;
-  final String residenceType;
   final String residenceYear;
   final String residenceFloor;
   final double overallRating;
@@ -22,7 +21,6 @@ class ReviewModel {
     required this.advantage,
     required this.disadvantage,
     required this.createdAt,
-    required this.residenceType,
     required this.residenceYear,
     required this.residenceFloor,
     required this.overallRating,
@@ -42,7 +40,6 @@ class ReviewModel {
       advantage: json["advantage"] ?? '',
       disadvantage: json["disadvantage"] ?? '',
       createdAt: json["createdAt"] ?? '',
-      residenceType: json["residenceType"] ?? '',
       residenceYear: json["residenceYear"] ?? '',
       residenceFloor: json["residenceFloor"] ?? '',
       overallRating: (json["overallRating"] ?? 0.0).toDouble(),
