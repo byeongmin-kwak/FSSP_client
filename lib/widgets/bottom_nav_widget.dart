@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:FSSP_cilent/screens/home_screen.dart';
 import 'package:FSSP_cilent/screens/map_screen.dart';
 import 'package:FSSP_cilent/screens/favorite_screen.dart';
-import 'package:FSSP_cilent/screens/profile_screen.dart';
 
 class BottomNavWidget extends StatefulWidget {
   final int initialIndex;

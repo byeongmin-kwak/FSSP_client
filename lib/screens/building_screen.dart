@@ -64,8 +64,8 @@ class _BuildingScreenState extends State<BuildingScreen> {
   }
 
   void _onScroll() {
-    final buildingInfoPosition =
-        _getPositionOfWidget(_buildingInfoKey.currentContext);
+    // final buildingInfoPosition =
+    _getPositionOfWidget(_buildingInfoKey.currentContext);
     final reviewPosition = _getPositionOfWidget(_reviewKey.currentContext);
 
     if (_scrollController.offset >= reviewPosition - 200) {
