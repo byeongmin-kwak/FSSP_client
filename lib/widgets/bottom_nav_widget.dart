@@ -19,7 +19,7 @@ class _BottomNavWidgetState extends State<BottomNavWidget> {
   static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     const MapScreen(),
-    //FavoriteScreen(),
+    const FavoriteScreen(),
     //ProfileScreen(),
   ];
 
