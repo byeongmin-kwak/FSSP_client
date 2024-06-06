@@ -4,6 +4,7 @@ import 'package:FSSP_cilent/screens/map_screen.dart';
 import 'package:FSSP_cilent/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class BuildingScreen extends StatefulWidget {
   final String address, bcode, jibunAddress, buildingName;
@@ -35,7 +36,8 @@ class _BuildingScreenState extends State<BuildingScreen> {
     prefs = await SharedPreferences.getInstance();
     final likedBuildings = prefs.getStringList('likedBuildings');
     if (likedBuildings != null) {
-      if (likedBuildings.contains(widget.address)) {
+      if (likedBuildings.any(
+          (element) => json.decode(element)['address'] == widget.address)) {
         setState(() {
           isLiked = true;
         });
@@ -96,11 +98,18 @@ class _BuildingScreenState extends State<BuildingScreen> {
 
   onHeartTap() async {
     final likedBuildings = prefs.getStringList('likedBuildings');
+    final buildingData = {
+      'address': widget.address,
+      'bcode': widget.bcode,
+      'jibunAddress': widget.jibunAddress,
+      'buildingName': widget.buildingName,
+    };
     if (likedBuildings != null) {
       if (isLiked) {
-        likedBuildings.remove(widget.address);
+        likedBuildings.removeWhere(
+            (element) => json.decode(element)['address'] == widget.address);
       } else {
-        likedBuildings.add(widget.address);
+        likedBuildings.add(json.encode(buildingData));
       }
       await prefs.setStringList('likedBuildings', likedBuildings);
       setState(() {

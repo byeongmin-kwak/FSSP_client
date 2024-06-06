@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'building_screen.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -10,7 +12,7 @@ class FavoriteScreen extends StatefulWidget {
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
   late SharedPreferences prefs;
-  List<String> likedBuildings = [];
+  List<Map<String, String>> likedBuildings = [];
 
   @override
   void initState() {
@@ -21,14 +23,34 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   _loadFavorites() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
-      likedBuildings = prefs.getStringList('likedBuildings') ?? [];
+      List<String>? savedList = prefs.getStringList('likedBuildings');
+      likedBuildings = savedList != null
+          ? savedList
+              .map((e) => Map<String, String>.from(json.decode(e)))
+              .toList()
+          : [];
     });
   }
 
   _removeFromFavorites(String address) async {
-    likedBuildings.remove(address);
-    await prefs.setStringList('likedBuildings', likedBuildings);
+    likedBuildings.removeWhere((element) => element['address'] == address);
+    await prefs.setStringList(
+        'likedBuildings', likedBuildings.map((e) => json.encode(e)).toList());
     setState(() {});
+  }
+
+  void _navigateToBuildingScreen(Map<String, String> building) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BuildingScreen(
+          address: building['address']!,
+          bcode: building['bcode']!,
+          jibunAddress: building['jibunAddress']!,
+          buildingName: building['buildingName']!,
+        ),
+      ),
+    );
   }
 
   @override
@@ -43,7 +65,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           : ListView.builder(
               itemCount: likedBuildings.length,
               itemBuilder: (context, index) {
-                final address = likedBuildings[index];
+                final building = likedBuildings[index];
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -56,17 +78,20 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                       leading: const Icon(Icons.location_city,
                           color: Colors.blueAccent),
                       title: Text(
-                        address,
+                        building['address']!,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black87,
                         ),
                       ),
+                      subtitle: Text(building['buildingName']!),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete_forever,
                             color: Colors.redAccent),
-                        onPressed: () => _removeFromFavorites(address),
+                        onPressed: () =>
+                            _removeFromFavorites(building['address']!),
                       ),
+                      onTap: () => _navigateToBuildingScreen(building),
                     ),
                   ),
                 );
@@ -74,4 +99,8 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             ),
     );
   }
+}
+
+void main() {
+  runApp(const MaterialApp(home: FavoriteScreen()));
 }
