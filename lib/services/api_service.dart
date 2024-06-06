@@ -69,6 +69,7 @@ class ApiService {
     } else {
       // '-'가 없는 경우, 숫자 부분만 번으로 설정
       bun = lastPart.padLeft(4, '0');
+      ji = '0000';
     }
 
     final response = await http.get(
@@ -78,7 +79,13 @@ class ApiService {
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final buildingData = jsonResponse['response']['body']['items']['item'];
-      return BuildingModel.fromJson(buildingData);
+      if (buildingData is List) {
+        final buildingData2 =
+            jsonResponse['response']['body']['items']['item'][0];
+        return BuildingModel.fromJson(buildingData2);
+      } else {
+        return BuildingModel.fromJson(buildingData);
+      }
     } else {
       throw Exception('Failed to load building information');
     }

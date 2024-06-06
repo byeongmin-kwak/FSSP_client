@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:FSSP_cilent/models/review_model.dart';
+import 'package:FSSP_cilent/screens/building_screen.dart';
 
 class ReviewWidget extends StatelessWidget {
   final ReviewModel review;
@@ -43,7 +44,19 @@ class ReviewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BuildingScreen(
+              address: review.address,
+              bcode: review.bcode,
+              jibunAddress: review.jibunAddress,
+              buildingName: review.buildingName,
+            ),
+          ),
+        );
+      },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         width: 300,
