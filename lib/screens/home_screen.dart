@@ -5,6 +5,7 @@ import 'package:FSSP_cilent/models/review_model.dart';
 import 'package:FSSP_cilent/services/api_service.dart';
 import 'package:FSSP_cilent/widgets/review_widget.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -201,7 +202,24 @@ class HomeScreen extends StatelessWidget {
                   style: const TextStyle(color: Colors.black)),
             );
           } else if (snapshot.hasData) {
-            return makeList(snapshot);
+            return CarouselSlider(
+              options: CarouselOptions(
+                height: 290,
+                autoPlay: true,
+                enlargeCenterPage: true,
+                aspectRatio: 16 / 9,
+                viewportFraction: 0.8,
+              ),
+              items: snapshot.data!.map((review) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return ReviewWidget(
+                      review: review,
+                    );
+                  },
+                );
+              }).toList(),
+            );
           } else {
             return const Center(
               child: Text('No reviews available',
@@ -209,23 +227,6 @@ class HomeScreen extends StatelessWidget {
             );
           }
         },
-      ),
-    );
-  }
-
-  ListView makeList(AsyncSnapshot<List<ReviewModel>> snapshot) {
-    return ListView.separated(
-      scrollDirection: Axis.horizontal,
-      itemCount: snapshot.data!.length,
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      itemBuilder: (context, index) {
-        var review = snapshot.data![index];
-        return ReviewWidget(
-          review: review,
-        );
-      },
-      separatorBuilder: (context, index) => const SizedBox(
-        width: 20,
       ),
     );
   }
