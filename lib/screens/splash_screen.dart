@@ -21,8 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-          builder: (context) =>
-              const BottomNavWidget(initialIndex: 0)), // 네비게이션 바 화면으로 이동합니다.
+          builder: (context) => const BottomNavWidget(initialIndex: 0)),
     );
   }
 

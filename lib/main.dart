@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
-import 'package:FSSP_cilent/widgets/bottom_nav_widget.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:FSSP_cilent/screens/splash_screen.dart'; // 스플래시 화면의 경로를 올바르게 설정하세요.
+import 'package:FSSP_cilent/screens/splash_screen.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
