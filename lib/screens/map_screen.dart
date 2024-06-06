@@ -57,6 +57,9 @@ class _MapScreenState extends State<MapScreen> with RouteAware {
               _mapController = controller;
               _fetchReviews(); // 지도가 준비되었을 때 리뷰를 가져옵니다.
             },
+            onCameraChange: (reason, isAnimated) {
+              _fetchReviews(); // 카메라가 이동할 때마다 리뷰를 가져옵니다.
+            },
             onMapTapped: (point, latLng) {
               if (_infoWindowOverlay != null) {
                 _infoWindowOverlay!.remove();
@@ -73,11 +76,17 @@ class _MapScreenState extends State<MapScreen> with RouteAware {
     // 현재 카메라 위치를 가져옵니다.
     final position = await _mapController.getCameraPosition();
     final target = position.target;
+    final zoom = position.zoom;
 
-    // 임의로 경계 범위를 설정합니다.
+    // 줌 레벨에 따른 대략적인 범위를 계산합니다.
+    final double latRange = _getLatRangeFromZoom(zoom);
+    final double lngRange = _getLngRangeFromZoom(zoom);
+
     final bounds = NLatLngBounds(
-      southWest: NLatLng(target.latitude - 0.01, target.longitude - 0.01),
-      northEast: NLatLng(target.latitude + 0.01, target.longitude + 0.01),
+      southWest:
+          NLatLng(target.latitude - latRange, target.longitude - lngRange),
+      northEast:
+          NLatLng(target.latitude + latRange, target.longitude + lngRange),
     );
 
     try {
@@ -92,6 +101,18 @@ class _MapScreenState extends State<MapScreen> with RouteAware {
       print('Error fetching reviews: $e');
       // 오류 처리
     }
+  }
+
+  double _getLatRangeFromZoom(double zoom) {
+    // 줌 레벨에 따라 위도 범위를 계산합니다.
+    // 이 값은 대략적인 값으로 필요에 따라 조정 가능합니다.
+    return 0.01 * (20 - zoom);
+  }
+
+  double _getLngRangeFromZoom(double zoom) {
+    // 줌 레벨에 따라 경도 범위를 계산합니다.
+    // 이 값은 대략적인 값으로 필요에 따라 조정 가능합니다.
+    return 0.01 * (20 - zoom);
   }
 
   void _updateMarkers(List reviews) {
