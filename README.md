@@ -16,6 +16,25 @@
 
 <br>
 
+## 📱 화면 구성
+
+<div align="center">
+
+  <!-- 첫 번째 줄 -->
+  <img src="https://github.com/user-attachments/assets/92544507-f7b7-4609-9af0-1577f3923e60" alt="처음 화면" width="230"/>
+  <img src="https://github.com/user-attachments/assets/78794949-39ef-4fa1-a6fb-9cb13e6d6a43" alt="메인 화면" width="230"/>
+  <img src="https://github.com/user-attachments/assets/7295e1ba-86ae-449e-bd3d-5589156217e1" alt="지도 리뷰 조회 화면" width="230"/>
+
+  <br/><br/>
+
+  <!-- 두 번째 줄 -->
+  <img src="https://github.com/user-attachments/assets/cb44c1c7-3f54-4ea6-be41-2b81a140af7a" alt="건물 정보 조회 화면" width="230"/>
+  <img src="https://github.com/user-attachments/assets/51f2bdf5-879e-40a5-90e1-1d71d72df2f0" alt="주소 검색 화면" width="230"/>
+  <img src="https://github.com/user-attachments/assets/1d911faf-5bcd-4269-8cbc-bdd664044eef" alt="리뷰 작성 화면" width="230"/>
+
+</div>
+
+
 ## 🎞 시연 영상
 > [집사 소개 영상 바로가기](https://youtu.be/b0I6lzLjCNA)
 
@@ -28,3 +47,8 @@
 
 ## 🤝 FSSP_server
 > [백엔드 GitHub 바로가기](https://github.com/byeongmin-kwak/FSSP_server)
+
+
+
+
+
